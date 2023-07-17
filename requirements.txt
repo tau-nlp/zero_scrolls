@@ -1,0 +1,13 @@
+
+fire
+pandas
+datasets
+
+# hf
+sentencepiece
+accelerate
+
+# api experiments
+openai
+tiktoken
+anthropic
