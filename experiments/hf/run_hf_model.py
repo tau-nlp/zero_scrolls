@@ -59,14 +59,15 @@ def process_model_input(tokenizer, example, max_tokens, device):
     return tokenized_input
 
 
-def main(model_name="google/flan-t5-small", results_dir="predictions", max_examples_per_task=None):
+def main(model_name="google/flan-t5-small", generations_dir="generations", max_examples_per_task=None):
     seed = 43
     random.seed(seed)
     np.random.seed(seed)
     hf_set_seed(seed)
     print("Params:")
     print(f"model: {model_name}")
-    print(f"results_dir: {results_dir}")
+    generations_dir = os.path.join(generations_dir, model_name.replace("/", "_").replace("-", "_"))
+    print(f"generations_dir: {generations_dir}")
     print(f"max_examples_per_task: {max_examples_per_task}")
     print("=" * 50)
     time = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
@@ -87,12 +88,12 @@ def main(model_name="google/flan-t5-small", results_dir="predictions", max_examp
     print(f"{model} model loaded!, device:{model.device}")
     out_file_name = "preds.jsonl"
 
-    print("Will write to:", results_dir)
+    print("Will write to:", generations_dir)
     for dataset in datasets:
         print(f"Processing dataset {dataset}")
         time = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
         print(f"time as start {dataset}: {time}")
-        dataset_results_dir = os.path.join(results_dir, dataset)
+        dataset_results_dir = os.path.join(generations_dir, dataset)
         os.makedirs(dataset_results_dir, exist_ok=True)
         print(f"Loading {dataset}")
         data = load_dataset("tau/zero_scrolls", dataset)
@@ -126,7 +127,7 @@ def main(model_name="google/flan-t5-small", results_dir="predictions", max_examp
         print(f"Done generating {dataset} i:{i}")
     time = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     print(f"time at end: {time}")
-    print(f"Look for predictions in {results_dir}")
+    print(f"Look for predictions in {generations_dir}")
 
 
 if __name__ == '__main__':
