@@ -4,8 +4,8 @@ This repository contains code to run inference on the [ZeroSCROLLS](https://www.
 
 ## Setup
 
-* Install [torch](https://pytorch.org/get-started/locally/).
-* Install transformers
+* Install [torch](https://pytorch.org/get-started/locally/)
+* Install transformers 4.30.2
 * pip install -r requirements.txt
 
 
@@ -14,10 +14,12 @@ This repository contains code to run inference on the [ZeroSCROLLS](https://www.
 ```python
 from datasets import load_dataset
 
-gov_report = load_dataset("tau/zero_scrolls", "gov_report")["test"]
+gov_report = load_dataset("tau/zero_scrolls", "gov_report", split="test")
 """
 Options are: ["gov_report", "summ_screen_fd", "qmsum", "squality", "qasper","narrative_qa", "quality", "musique", "space_digest","book_sum_sort"]
+There is also a small number of examples (~20 per task) in a "validation" split, meant for eyeballing purposes
 """
+
 ```
 
 - via ZIP files, where each split is in a JSONL file:

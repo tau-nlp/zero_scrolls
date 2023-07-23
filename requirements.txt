@@ -1,13 +1,14 @@
 
 fire
-pandas
-datasets
+pandas==2.0.3
+datasets==2.13.1
 
 # hf
-sentencepiece
-accelerate
+tokenizers==0.13.3
+sentencepiece==0.1.99
+accelerate==0.21.0
 
 # api experiments
-openai
-tiktoken
-anthropic
+openai==0.27.8
+tiktoken==0.4.0
+anthropic==0.3.4
