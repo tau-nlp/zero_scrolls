@@ -86,45 +86,41 @@ def main(model_name="google/flan-t5-small", generations_dir="generations", max_e
     model = model.eval()
 
     print(f"{model} model loaded!, device:{model.device}")
-    out_file_name = "preds.jsonl"
 
     print("Will write to:", generations_dir)
+    os.makedirs(generations_dir, exist_ok=True)
     for dataset in datasets:
-        print(f"Processing dataset {dataset}")
+        generations = dict()
+        print(f"Processing {dataset}")
         time = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
         print(f"time as start {dataset}: {time}")
-        dataset_results_dir = os.path.join(generations_dir, dataset)
-        os.makedirs(dataset_results_dir, exist_ok=True)
         print(f"Loading {dataset}")
         data = load_dataset("tau/zero_scrolls", dataset)
         print(f"Loaded {dataset}")
 
-        predictions_file_path = os.path.join(dataset_results_dir, out_file_name)
+        for i, example in enumerate(data["test"]):
 
-        with open(predictions_file_path, 'w') as f_out:
-            for i, example in enumerate(data["test"]):
+            if i >= max_examples_per_task:
+                print(f"Reached {max_examples_per_task} for {dataset}. Breaking")
+                break
 
-                if i >= max_examples_per_task:
-                    print(f"Reached {max_examples_per_task} for {dataset}. Breaking")
-                    break
+            model_input = process_model_input(tokenizer, example, max_input_length, device)
 
-                model_input = process_model_input(tokenizer, example, max_input_length, device)
+            prediction_token_ids = model.generate(model_input,
+                                                  max_length=1024,
+                                                  do_sample=False,
+                                                  top_p=0,
+                                                  top_k=0,
+                                                  temperature=1)
 
-                prediction_token_ids = model.generate(model_input,
-                                                      max_length=1024,
-                                                      do_sample=False,
-                                                      top_p=0,
-                                                      top_k=0,
-                                                      temperature=1)
+            predicted_text = tokenizer.decode(prediction_token_ids[0], skip_special_tokens=True)
+            generations[example["id"]] = predicted_text
 
-                predicted_text = tokenizer.decode(prediction_token_ids[0], skip_special_tokens=True)
-                example["tokenized_input"] = model_input[0].tolist()
-                example["detokenized_input"] = tokenizer.decode(model_input[0])
-                example["max_input_length"] = max_input_length
-                example["prediction"] = predicted_text
-                f_out.write(json.dumps(example) + "\n")
+        out_file_path = os.path.join(generations_dir, f"preds_{dataset}.json")
+        with open(out_file_path, 'w') as f_out:
+            json.dump(generations, f_out, indent=4)
 
-        print(f"Done generating {dataset} i:{i}")
+        print(f"Done generating {len(generations)} examples from {dataset}")
     time = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     print(f"time at end: {time}")
     print(f"Look for predictions in {generations_dir}")

@@ -23,38 +23,39 @@ def generate_predictions_using_api(dataset_name: str, model_name: str = "text-da
     api.init_api()
     # load task data
     zero_scrolls_dataset = load_dataset("tau/zero_scrolls",dataset_name)["test"]
-    predictions_file_path = Path(f"runs/api/{model_folder_name}/{dataset_name}/preds.jsonl")
-    predictions_file_path.parent.mkdir(parents=True, exist_ok=True)
+    preds_folder_path = Path(f"generations/api/{model_folder_name}")
+    preds_folder_path.mkdir(parents=True, exist_ok=True)
+
+
     print(f"generating predictions for {dataset_name} with OpenAI {model_name}")
 
     #  API setup and parameters
     parameters = api.init_params()
-    saved_predictions = 0
-    predictions_file_path = predictions_file_path.parent / "preds.jsonl"
-    with open(predictions_file_path, 'a') as f_out:
+    # with open(predictions_file_path, 'a') as f_out:
+    generations = dict()
+    for i, example in tqdm(enumerate(zero_scrolls_dataset)):
+        if limit_to_n_examples is not None and i >= limit_to_n_examples:
+            print(
+                f"Breaking when limit_to_n_examples is reached. i={i}, limit_to_n_examples={limit_to_n_examples}, generated {len(generations)} predictions")
+            break
 
-        for i, example in tqdm(enumerate(zero_scrolls_dataset)):
-            if limit_to_n_examples is not None and i >= limit_to_n_examples:
-                print(
-                    f"Breaking when limit_to_n_examples is reached. i={i}, limit_to_n_examples={limit_to_n_examples}, newly generated predictions={saved_predictions}")
-                break
+        prompt = api.build_prompt(example)
+        api.preprocess_parameters(parameters, prompt)
 
-            prompt = api.build_prompt(example)
-            api.preprocess_parameters(parameters, prompt)
+        time.sleep(0.5) # helps with rate limits
+        response = api.call(parameters)
+        output = api.build_output(example, prompt, parameters, response)
 
-            time.sleep(0.5) # helps with rate limits
-            response = api.call(parameters)
-            output = api.build_output(example, prompt, parameters, response)
+        generations[example["id"]] = output["prediction"]
+        if i % log_progress_every_n_examples == 0:
+            print(
+                f'generated {len(generations)} examples from {dataset_name} using {model_name}')
 
-            # save output
-            f_out.write(json.dumps(output) + "\n")
-            saved_predictions += 1
-            if i % log_progress_every_n_examples == 0:
-                print(
-                    f'saved {saved_predictions} predictions new predictions for {dataset_name} using {model_name}')
-
+    predictions_file_path = preds_folder_path / f"preds_{dataset_name}.json"
+    with open(predictions_file_path, 'w') as f_out:
+        json.dump(generations, f_out, indent=4)
     print(
-        f'finished generating {saved_predictions} predictions for {dataset_name} using OpenAI {model_name}')
+        f'finished generating {len(generations)} predictions for {dataset_name} using OpenAI {model_name}')
 
 
 if __name__ == '__main__':
