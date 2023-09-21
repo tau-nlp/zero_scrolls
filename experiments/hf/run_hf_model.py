@@ -59,7 +59,7 @@ def process_model_input(tokenizer, example, max_tokens, device):
     return tokenized_input
 
 
-def main(model_name="google/flan-t5-small", generations_dir="generations", max_examples_per_task=None):
+def main(model_name="google/flan-t5-small", generations_dir="generations", max_examples_per_task=-1):
     seed = 43
     random.seed(seed)
     np.random.seed(seed)
@@ -100,7 +100,7 @@ def main(model_name="google/flan-t5-small", generations_dir="generations", max_e
 
         for i, example in enumerate(data["test"]):
 
-            if i >= max_examples_per_task:
+            if 0 < max_examples_per_task == i:
                 print(f"Reached {max_examples_per_task} for {dataset}. Breaking")
                 break
 
