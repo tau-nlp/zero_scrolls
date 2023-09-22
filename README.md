@@ -102,7 +102,7 @@ Please set:
 
 Run:
 ```bash
-python prepare_submission.py \
+python submission/prepare_submission.py \
 --gov_report_file GOV_REPORT_PREDS_FILE \
 --summ_screen_file SUMM_SCREEN_FD_PREDS_FILE \
 --qmsum_file QMSUM_PREDS_FILE \
@@ -115,6 +115,19 @@ python prepare_submission.py \
 --book_sum_sort_file BOOK_SUM_SORT_PREDS_FILE \
 --output_dir OUTPUT_DIR
 ```
+### Verify your submission file is valid
+Run:
+```bash
+python submission/verify_submission.py \
+--all_predictions SUBMMISION_FILE \
+--output_dir OUTPUT_DIR
+```
+A valid submission file will result in the following line printed:
+```bash
+The verification was successful.
+```
+Please fix any errors before making your submission.
+
 
 ## Leaderboard
 The live leaderboard is [here](https://www.zero.scrolls-benchmark.com/leaderboard). 
