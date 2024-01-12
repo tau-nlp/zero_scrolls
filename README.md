@@ -23,16 +23,16 @@ There is also a small number of examples (~20 per task) in a "validation" split,
 ```
 
 - via ZIP files, where each split is in a JSONL file:
-  - [GovReport](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/gov_report.zip)
-  - [SummScreenFD](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/summ_screen_fd.zip)
-  - [QMSum](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/qmsum.zip)
-  - [SQuALITY](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/squality.zip)
-  - [Qasper](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/qasper.zip)
-  - [NarrativeQA](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/narrative_qa.zip)
-  - [QuALITY](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/quality.zip)
-  - [MuSiQue](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/musique.zip)
-  - [SpaceDigest](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/space_digest.zip)
-  - [BookSumSort](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/book_sum_sort.zip)
+  - [GovReport](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/gov_report.zip)
+  - [SummScreenFD](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/summ_screen_fd.zip)
+  - [QMSum](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/qmsum.zip)
+  - [SQuALITY](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/squality.zip)
+  - [Qasper](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/qasper.zip)
+  - [NarrativeQA](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/narrative_qa.zip)
+  - [QuALITY](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/quality.zip)
+  - [MuSiQue](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/musique.zip)
+  - [SpaceDigest](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/space_digest.zip)
+  - [BookSumSort](https://huggingface.co/datasets/tau/zero_scrolls/resolve/main/book_sum_sort.zip)
 
 
 ## Inference with Huggingface models 
@@ -115,7 +115,7 @@ python submission/prepare_submission.py \
 --book_sum_sort_file BOOK_SUM_SORT_PREDS_FILE \
 --output_dir OUTPUT_DIR
 ```
-### Verify your submission file is valid
+### Verify your submission file
 Run:
 ```bash
 python submission/verify_submission.py \
@@ -136,13 +136,24 @@ The live leaderboard is [here](https://www.zero.scrolls-benchmark.com/leaderboar
 
 ## Citation
 ```
-@misc{shaham2023zeroscrolls,
-      title={ZeroSCROLLS: A Zero-Shot Benchmark for Long Text Understanding}, 
-      author={Uri Shaham and Maor Ivgi and Avia Efrat and Jonathan Berant and Omer Levy},
-      year={2023},
-      eprint={2305.14196},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{shaham-etal-2023-zeroscrolls,
+    title = "{Z}ero{SCROLLS}: A Zero-Shot Benchmark for Long Text Understanding",
+    author = "Shaham, Uri  and
+      Ivgi, Maor  and
+      Efrat, Avia  and
+      Berant, Jonathan  and
+      Levy, Omer",
+    editor = "Bouamor, Houda  and
+      Pino, Juan  and
+      Bali, Kalika",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2023",
+    month = dec,
+    year = "2023",
+    address = "Singapore",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.findings-emnlp.536",
+    doi = "10.18653/v1/2023.findings-emnlp.536",
+    pages = "7977--7989"
 }
 ```
-If you find the ZeroSCROLLS data useful, please make sure to cite also the original dataset papers: [[bibtex]](https://zero-scrolls-tau.s3.us-east-2.amazonaws.com/zero_scrolls_datasets.bib)
+If you find the ZeroSCROLLS data useful, please make sure to cite also the original dataset papers: [[bibtex]](https://github.com/tau-nlp/zero_scrolls/tree/main/zero_scrolls_datasets.bib)
