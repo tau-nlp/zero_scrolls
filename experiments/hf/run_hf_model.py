@@ -107,7 +107,7 @@ def main(model_name="google/flan-t5-small", generations_dir="generations", max_e
             model_input = process_model_input(tokenizer, example, max_input_length, device)
 
             prediction_token_ids = model.generate(model_input,
-                                                  max_length=1024,
+                                                  max_new_tokens=1024,
                                                   do_sample=False,
                                                   top_p=0,
                                                   top_k=0,
