@@ -104,7 +104,7 @@ Run:
 ```bash
 python submission/prepare_submission.py \
 --gov_report_file GOV_REPORT_PREDS_FILE \
---summ_screen_file SUMM_SCREEN_FD_PREDS_FILE \
+--summ_screen_fd_file SUMM_SCREEN_FD_PREDS_FILE \
 --qmsum_file QMSUM_PREDS_FILE \
 --squality_file SQUALITY_PREDS_FILE \
 --qasper_file QASPER_PREDS_FILE \
